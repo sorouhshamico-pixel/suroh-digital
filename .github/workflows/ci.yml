@@ -1,17 +1,79 @@
-name: PHP Quality Check
+name: PHP and MySQL Quality Check
 on:
   push:
     branches: [main, development]
   pull_request:
     branches: [main]
 jobs:
-  php-lint:
+  integration:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: test-only-password
+          MYSQL_DATABASE: sorouh_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      APP_ENV: local
+      APP_URL: http://127.0.0.1:8081
+      TEST_BASE_URL: http://127.0.0.1:8081
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_DATABASE: sorouh_test
+      DB_USERNAME: root
+      DB_PASSWORD: test-only-password
     steps:
       - uses: actions/checkout@v4
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-      - name: Lint PHP
-        run: find app config public resources routes database -name '*.php' -print0 | xargs -0 -n1 php -l
+          extensions: pdo_mysql, mbstring, dom, curl
+      - name: PHP syntax
+        run: find app config public resources routes database tools tests -name '*.php' -print0 | xargs -0 -n1 php -l
+      - name: JavaScript syntax
+        run: |
+          node --check public/assets/js/app.js
+          node --check public/assets/js/admin.js
+      - name: Prepare isolated runtime
+        run: |
+          mkdir -p storage/testing/runtime/{logs,cache,sessions}
+          echo "STORAGE_PATH=$GITHUB_WORKSPACE/storage/testing/runtime" >> "$GITHUB_ENV"
+      - name: Start test server
+        run: |
+          php tests/prepare.php
+          php -S 127.0.0.1:8081 -t public public/index.php > storage/testing/server.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl -sf http://127.0.0.1:8081/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          exit 1
+      - name: HTTP and database integration
+        run: php tests/run.php
+      - name: Administrator CLI validation
+        run: php tests/admin_cli.php
+      - name: Legacy non-destructive migration
+        run: php tests/migration.php
+      - name: Production SEO and cookie configuration
+        run: php tests/production.php
+      - name: Deployment preflight behavior
+        run: php tests/preflight.php
+      - name: Browser and mobile QA
+        run: |
+          npm install --no-save --package-lock=false playwright
+          npx playwright install --with-deps chromium
+          CHROME_PATH=$(node -e "console.log(require('playwright').chromium.executablePath())") node tests/browser.cjs
+      - name: Keep QA artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-qa
+          path: tests/artifacts
+          if-no-files-found: ignore
