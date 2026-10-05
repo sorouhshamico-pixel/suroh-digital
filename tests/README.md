@@ -7,6 +7,7 @@ Start a separate server with the same environment:
 Run `php tests/run.php`. The suite applies fresh schema and the additive migration twice, then exercises real HTTP flows and verifies records in MySQL.
 For browser tests install Playwright as a development-only dependency (`npm install --no-save --package-lock=false playwright`). Run `node tests/browser.cjs` with the same environment and CHROME_PATH set to the installed Chrome/Chromium binary (Windows Chrome is the default). It uses random disposable admin credentials and tests Arabic RTL, mobile layouts, navigation, form conversion, UTM, tracking failures and CRM under CSP.
 Screenshots and console/network reports go to ignored tests/artifacts. Browser tests do not imply that third-party CDN availability or real GA/GTM delivery was verified; inspect the report.
+`php tests/timezone.php` verifies that MySQL sessions use the application's existing Riyadh clock, so publishing now works even when the database server defaults to UTC, while future scheduling remains intact.
 PHP syntax: lint all PHP files under app, config, public, resources, routes, database, tools and tests.
 JavaScript syntax: `node --check public/assets/js/app.js` and `node --check public/assets/js/admin.js`.
 `php tools/preflight.php` is a read-only production configuration check; it must fail on a local/development environment. No production deploy is performed by any test.

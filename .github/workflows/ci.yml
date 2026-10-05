@@ -57,6 +57,8 @@ jobs:
           exit 1
       - name: HTTP and database integration
         run: php tests/run.php
+      - name: Publication timezone consistency
+        run: php tests/timezone.php
       - name: Administrator CLI validation
         run: php tests/admin_cli.php
       - name: Legacy non-destructive migration
