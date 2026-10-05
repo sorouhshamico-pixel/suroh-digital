@@ -23,8 +23,8 @@ final class LeadController extends Controller {
     try{
         $st=$pdo->prepare("INSERT INTO leads(lead_id,name,phone,email,service,message,status,utm_source,utm_medium,utm_campaign,utm_content,utm_term,landing_page,referrer,visitor_id,session_id,submission_id,consent_at) VALUES(?,?,?,?,?,?,'new',?,?,?,?,?,?,?,?,?,?,NOW())");
         $st->execute([$leadId,$name,$phone,$email,$service,$message,$a['utm_source'],$a['utm_medium'],$a['utm_campaign'],$a['utm_content'],$a['utm_term'],$a['landing_page'],$a['referrer'],$_SESSION['visitor_id']??'',$_SESSION['tracking_session_id']??'',$submission]);
-        $event=$pdo->prepare("INSERT INTO tracking_events(visitor_id,session_id,event_name,page_url,landing_page,referrer,utm_source,utm_medium,utm_campaign,utm_content,utm_term,metadata) VALUES(?,?,'form_submit','/contact',?,?,?,?,?,?,?,?)");
-        $event->execute([$_SESSION['visitor_id']??'',$_SESSION['tracking_session_id']??'',$a['landing_page'],$a['referrer'],$a['utm_source'],$a['utm_medium'],$a['utm_campaign'],$a['utm_content'],$a['utm_term'],json_safe(['service'=>$service])]);
+        $event=$pdo->prepare("INSERT INTO tracking_events(visitor_id,session_id,event_name,page_url,landing_page,referrer,utm_source,utm_medium,utm_campaign,utm_content,utm_term,metadata) VALUES(?,?,'form_submit',?,?,?,?,?,?,?,?,?)");
+        $event->execute([$_SESSION['visitor_id']??'',$_SESSION['tracking_session_id']??'',route_path('/contact'),$a['landing_page'],$a['referrer'],$a['utm_source'],$a['utm_medium'],$a['utm_campaign'],$a['utm_content'],$a['utm_term'],json_safe(['service'=>$service])]);
         $pdo->commit();
     }catch(\Throwable $error){if($pdo->inTransaction())$pdo->rollBack();throw $error;}
     $_SESSION['last_submission_id']=$submission;unset($_SESSION['submission_id']);

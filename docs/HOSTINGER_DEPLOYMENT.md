@@ -82,3 +82,6 @@ php tools/preflight.php
 ## مراجع الإعداد
 - PHP session security: https://www.php.net/manual/en/features.session.security.management.php
 - Hostinger Git deployment: https://www.hostinger.com/support/1583302-how-to-deploy-a-git-repository-in-hostinger/
+
+## Asset paths after the frontend repair
+APP_URL is the canonical installation URL and also supplies its optional subfolder prefix. Production remains `https://digital.suroohalshami.com`; a local mount can use `http://127.0.0.1:8080/sorouh`. Route, asset, form, tracking, redirect and canonical paths must use the shared helpers in app/paths.php. Do not add root-hardcoded links or change APP_URL to include `/public` as a workaround for an incorrect document root. Apache subfolder hosting must map the prefix to the public directory; its relative rewrite was verified with an actual Alias. Fonts resolve from their CSS file's directory. CSS/JS/image URLs have content fingerprints, so publish code and public assets together. The public-only package keeps its separate private-app entrypoint and unchanged security boundary.

@@ -21,7 +21,7 @@ if(empty($_SESSION['submission_id'])){$_SESSION['submission_id']=bin2hex(random_
     </div>
     <div class="hero-visual reveal delay-1">
       <div class="photo-frame hero-photo">
-        <img src="/assets/img/hero-team.webp" alt="فريق تقني يعمل على مشروع رقمي" width="960" height="638" loading="eager" fetchpriority="high" decoding="async">
+        <img src="<?= e(asset('img/hero-team.webp')) ?>" alt="فريق تقني يعمل على مشروع رقمي" width="960" height="638" loading="eager" fetchpriority="high" decoding="async">
         <div class="photo-overlay"></div>
       </div>
       <div class="floating-card card-a"><span class="iconbox"><i data-lucide="trending-up"></i></span><div><b>حملات قابلة للقياس</b><small>قرارات أفضل بالبيانات</small></div></div>
@@ -45,7 +45,7 @@ if(empty($_SESSION['submission_id'])){$_SESSION['submission_id']=bin2hex(random_
         <span class="service-num">0<?= $i+1 ?></span>
         <h3><?= e($service['title']) ?></h3>
         <p><?= e($service['desc']) ?></p>
-        <a href="/services/<?= e($service['slug']) ?>">تفاصيل الخدمة <i data-lucide="arrow-left"></i></a>
+        <a href="<?= e(route_path('/services/' . (e($service['slug'])))) ?>">تفاصيل الخدمة <i data-lucide="arrow-left"></i></a>
       </article>
       <?php endforeach; ?>
     </div>
@@ -55,7 +55,7 @@ if(empty($_SESSION['submission_id'])){$_SESSION['submission_id']=bin2hex(random_
 <section id="work" class="feature-section section-pad">
   <div class="container feature-grid">
     <div class="feature-media reveal">
-      <img src="/assets/img/development.webp" alt="مطور يعمل على برمجة موقع إلكتروني" width="960" height="1440" loading="lazy" decoding="async">
+      <img src="<?= e(asset('img/development.webp')) ?>" alt="مطور يعمل على برمجة موقع إلكتروني" width="960" height="1440" loading="lazy" decoding="async">
       <div class="metric-card"><span>سرعة + تجربة مستخدم</span><strong>Performance First</strong></div>
     </div>
     <div class="feature-copy reveal delay-1">
@@ -72,12 +72,26 @@ if(empty($_SESSION['submission_id'])){$_SESSION['submission_id']=bin2hex(random_
   </div>
 </section>
 
-<section class="showcase section-pad">
+<section id="portfolio" class="showcase section-pad">
   <div class="container">
-    <div class="section-head reveal"><div><span class="eyebrow">أسلوبنا</span><h2>نحوّل الفكرة إلى <span class="gold-text">تجربة مقنعة.</span></h2></div><p>نعمل على الرسالة، الهيكل، التصميم، الكود، ثم القياس والتحسين بعد الإطلاق.</p></div>
+    <div class="section-head reveal"><div><span class="eyebrow">أعمالنا · نماذج حلول</span><h2>نحوّل الفكرة إلى <span class="gold-text">تجربة مقنعة.</span></h2></div><p>نعمل على الرسالة، الهيكل، التصميم، الكود، ثم القياس والتحسين بعد الإطلاق. هذه تصورات توضيحية للحلول التي يمكن تنفيذها لمشروعك.</p></div>
     <div class="showcase-grid">
-      <div class="showcase-main reveal"><img src="/assets/img/strategy.webp" alt="فريق يناقش استراتيجية مشروع رقمي" width="960" height="640" loading="lazy" decoding="async"><div class="caption"><span>استراتيجية وتجربة</span><b>قرارات مبنية على هدف العمل</b></div></div>
+      <div class="showcase-main reveal"><img src="<?= e(asset('img/strategy.webp')) ?>" alt="فريق يناقش استراتيجية مشروع رقمي" width="960" height="640" loading="lazy" decoding="async"><div class="caption"><span>استراتيجية وتجربة</span><b>قرارات مبنية على هدف العمل</b></div></div>
       <div class="showcase-side reveal delay-1"><div class="side-card"><i data-lucide="layout-dashboard"></i><b>واجهات تبيع</b><span>تصميم واضح يقود الزائر نحو الإجراء المطلوب.</span></div><div class="side-card accent"><i data-lucide="bar-chart-3"></i><b>قياس مستمر</b><span>نعرف من أين أتى العميل وما الإجراء الذي قام به.</span></div></div>
+    </div>
+    <div class="portfolio-grid">
+      <article class="portfolio-card reveal">
+        <div class="mockup" aria-hidden="true"><div class="mock-window"><div class="mock-chrome"><i></i><i></i><i></i></div><div class="mock-content"><div class="mock-lines"><i></i><i></i><i></i><i></i></div><div class="mock-tile"></div></div></div></div>
+        <div class="portfolio-copy"><span>تصور توضيحي · مواقع الشركات</span><h3>حضور يعكس قيمة علامتك.</h3><p>موقع مؤسسي يجمع الهوية والخدمات وتجربة تواصل واضحة.</p><a class="text-link" href="<?= e(route_path('/services/web-development')) ?>">اكتشف حلول المواقع <i data-lucide="arrow-left"></i></a></div>
+      </article>
+      <article class="portfolio-card reveal delay-1">
+        <div class="mockup mockup-blue" aria-hidden="true"><div class="mock-window"><div class="mock-chrome"><i></i><i></i><i></i></div><div class="mock-content"><div class="mock-lines"><i></i><i></i><i></i><i></i></div><div class="mock-tile"></div></div></div></div>
+        <div class="portfolio-copy"><span>تصور توضيحي · صفحات الحملات</span><h3>من الإعلان إلى الاستفسار.</h3><p>صفحة هبوط برسالة مركزة وإجراء واضح وقياس للتحويلات.</p><a class="text-link" href="<?= e(route_path('/services/digital-marketing')) ?>">اكتشف حلول التسويق <i data-lucide="arrow-left"></i></a></div>
+      </article>
+      <article class="portfolio-card reveal delay-2">
+        <div class="mockup mockup-blue" aria-hidden="true"><div class="mock-window"><div class="mock-chrome"><i></i><i></i><i></i></div><div class="mock-dashboard"><i></i><i></i><i></i></div><div class="mock-bars"><i></i><i></i><i></i><i></i><i></i></div></div></div>
+        <div class="portfolio-copy"><span>تصور توضيحي · أنظمة الأعمال</span><h3>رؤية أوضح. إدارة أسهل.</h3><p>لوحات إدارة وأتمتة تنظم العمليات وتجمع بيانات العمل.</p><a class="text-link" href="<?= e(route_path('/services/custom-software')) ?>">اكتشف الحلول المخصصة <i data-lucide="arrow-left"></i></a></div>
+      </article>
     </div>
   </div>
 </section>
@@ -93,14 +107,22 @@ if(empty($_SESSION['submission_id'])){$_SESSION['submission_id']=bin2hex(random_
   </div>
 </section>
 
+<section class="stats-band" aria-label="منظومتنا بالأرقام">
+  <div class="container home-stats">
+    <div><strong><?= str_pad((string) count($services), 2, '0', STR_PAD_LEFT) ?></strong><span>خدمات رقمية</span><small>تعمل معًا لنمو أعمالك</small></div>
+    <div><strong><?= str_pad((string) count($steps), 2, '0', STR_PAD_LEFT) ?></strong><span>مراحل تنفيذ</span><small>من الفكرة إلى القياس</small></div>
+    <div><strong>01</strong><span>منظومة متكاملة</span><small>تصميم وتطوير وتسويق</small></div>
+  </div>
+</section>
+
 <section id="insights" class="insights section-pad">
   <div class="container">
-    <div class="section-head reveal"><div><span class="eyebrow">من المدونة</span><h2>محتوى يساعدك على اتخاذ <span class="gold-text">قرار أفضل.</span></h2></div><a class="text-link" href="/blog">جميع المقالات <i data-lucide="arrow-left"></i></a></div>
+    <div class="section-head reveal"><div><span class="eyebrow">من المدونة</span><h2>محتوى يساعدك على اتخاذ <span class="gold-text">قرار أفضل.</span></h2></div><a class="text-link" href="<?= e(route_path('/blog')) ?>">جميع المقالات <i data-lucide="arrow-left"></i></a></div>
     <div class="articles-grid">
       <?php foreach($posts as $i=>$post): ?>
       <article class="article-card reveal <?= $i===1?'delay-1':($i===2?'delay-2':'') ?>">
-        <a class="article-img" href="/blog/<?= e($post['slug']) ?>"><?php if($post['featured_image']): ?><img src="<?= e($post['featured_image']) ?>" alt="<?= e($post['title']) ?>" loading="lazy"><?php else: ?><div class="article-placeholder">Sorouh Digital</div><?php endif; ?></a>
-        <span><?= e(date('Y/m/d',strtotime($post['published_at'] ?: 'now'))) ?></span><h3><a href="/blog/<?= e($post['slug']) ?>"><?= e($post['title']) ?></a></h3><a href="/blog/<?= e($post['slug']) ?>">اقرأ المقال</a>
+        <a class="article-img" href="<?= e(route_path('/blog/' . (e($post['slug'])))) ?>"><?php if($post['featured_image']): ?><img src="<?= e(media_url($post['featured_image'])) ?>" alt="<?= e($post['title']) ?>" loading="lazy"><?php else: ?><div class="article-placeholder">Sorouh Digital</div><?php endif; ?></a>
+        <span><?= e(date('Y/m/d',strtotime($post['published_at'] ?: 'now'))) ?></span><h3><a href="<?= e(route_path('/blog/' . (e($post['slug'])))) ?>"><?= e($post['title']) ?></a></h3><a href="<?= e(route_path('/blog/' . (e($post['slug'])))) ?>">اقرأ المقال</a>
       </article>
       <?php endforeach; ?>
       <?php if(!$posts): ?><div class="empty-public"><h3>ابدأ بفهم احتياجك الرقمي.</h3><p>تعرّف على الخدمات المناسبة لمشروعك، أو تواصل معنا لمناقشة نطاق التنفيذ.</p><a class="text-link" href="#services">استكشف خدماتنا</a></div><?php endif; ?>
@@ -108,10 +130,14 @@ if(empty($_SESSION['submission_id'])){$_SESSION['submission_id']=bin2hex(random_
   </div>
 </section>
 
+<section class="cta-band">
+  <div class="container"><div><span>خطوتك التالية تبدأ بمحادثة</span><h2>مشروعك يستحق حضورًا يليق به.</h2></div><a class="btn btn-gold btn-lg track" data-event="whatsapp_click" href="https://wa.me/<?= e(config('whatsapp')) ?>" target="_blank" rel="noopener"><i data-lucide="message-circle"></i> لنتحدث عن مشروعك</a></div>
+</section>
+
 <section id="contact" class="contact section-pad">
   <div class="container contact-grid">
     <div class="contact-copy reveal"><span class="eyebrow">ابدأ مشروعك</span><h2>أخبرنا بما تريد بناءه، وسنرتب لك <span class="gold-text">المسار المناسب.</span></h2><p>أرسل تفاصيل مختصرة عن نشاطك والخدمة المطلوبة لنناقش معك النطاق والخطوات المناسبة.</p><div class="contact-direct"><a class="track" data-event="whatsapp_click" href="https://wa.me/<?= e(config('whatsapp')) ?>"><i data-lucide="message-circle"></i><span><small>واتساب</small><b><?= e(config('phone')) ?></b></span></a><a class="track" data-event="phone_click" href="tel:<?= e(config('phone')) ?>"><i data-lucide="phone-call"></i><span><small>اتصال مباشر</small><b><?= e(config('phone')) ?></b></span></a></div></div>
-    <form class="contact-form reveal delay-1" method="post" action="/contact" data-lead-form>
+    <form class="contact-form reveal delay-1" method="post" action="<?= e(route_path('/contact')) ?>" data-lead-form>
       <?php if($success): ?><div class="alert success"><?= e($success) ?></div><?php endif; ?>
       <?php if($error): ?><div class="alert error"><?= e($error) ?></div><?php endif; ?>
       <input type="hidden" name="_token" value="<?= e(csrf_token()) ?>">
@@ -121,9 +147,9 @@ if(empty($_SESSION['submission_id'])){$_SESSION['submission_id']=bin2hex(random_
       <div class="field-row"><label>الاسم<input required name="name" value="<?= e(old('name')) ?>" placeholder="اسمك أو اسم المنشأة"></label><label>رقم التواصل<input required name="phone" value="<?= e(old('phone')) ?>" inputmode="tel" placeholder="05xxxxxxxx"></label></div><label>البريد الإلكتروني <small>اختياري</small><input type="email" name="email" value="<?= e(old('email')) ?>" placeholder="name@company.com"></label>
       <label>الخدمة المطلوبة<select name="service"><option>تصميم وبرمجة موقع</option><option>التسويق الإلكتروني</option><option>تحسين محركات البحث</option><option>الجرافيك والهوية</option><option>إدارة حراج ومرجان</option><option>حلول برمجية مخصصة</option></select></label>
       <label>تفاصيل المشروع<textarea name="message" rows="5" maxlength="3000" placeholder="ما الذي تريد تنفيذه؟"><?= e(old('message')) ?></textarea></label>
-      <label class="consent"><input type="checkbox" name="consent" value="1" required><span>أوافق على معالجة بياناتي للتواصل بشأن الطلب وفق <a href="/privacy">سياسة الخصوصية</a>.</span></label>
+      <label class="consent"><input type="checkbox" name="consent" value="1" required><span>أوافق على معالجة بياناتي للتواصل بشأن الطلب وفق <a href="<?= e(route_path('/privacy')) ?>">سياسة الخصوصية</a>.</span></label>
       <button class="btn btn-gold btn-lg" type="submit"><i data-lucide="send"></i> إرسال طلب الخدمة</button>
-      <small class="form-note">استخدام الموقع يخضع لـ<a href="/terms">الشروط والأحكام</a>.</small>
+      <small class="form-note">استخدام الموقع يخضع لـ<a href="<?= e(route_path('/terms')) ?>">الشروط والأحكام</a>.</small>
     </form>
   </div>
 </section>

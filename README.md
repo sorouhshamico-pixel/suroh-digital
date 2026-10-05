@@ -21,6 +21,7 @@ mysql -h HOST -u USER -p DATABASE < database/schema.sql
 php -S 127.0.0.1:8080 -t public public/index.php
 ```
 افتح http://127.0.0.1:8080. قاعدة البيانات مطلوبة لحفظ الطلبات؛ لا يعلن التطبيق نجاحًا عند تعطلها.
+للتشغيل داخل مجلد فرعي، اضبط `APP_URL=http://127.0.0.1:8080/sorouh` وافتح `/sorouh/` بنفس أمر التشغيل أعلاه. يستنتج التطبيق المسار الأساسي من APP_URL ويوحد الأصول والروابط والنماذج والتتبع والتحويلات وSEO. على Apache يجب توجيه ذلك المسار إلى `public` عبر إعداد الاستضافة أو Alias؛ لا تنقل الملفات الخاصة إلى المجلد العام. يظل إعداد الإنتاج المستهدف `APP_URL=https://digital.suroohalshami.com` مع Document Root يشير إلى `public`.
 للقواعد الموجودة، خذ نسخة احتياطية مؤكدة قبل:
 ```bash
 php database/migrate.php --backup-confirmed

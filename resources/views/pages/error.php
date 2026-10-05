@@ -1,1 +1,1 @@
-<section class="page-hero section-pad"><div class="container narrow"><span class="eyebrow">تعذر إتمام الطلب</span><h1>نواجه مشكلة مؤقتة.</h1><p>يرجى المحاولة لاحقًا، أو التواصل معنا عبر الهاتف أو واتساب.</p><a class="btn btn-gold" href="/">العودة للرئيسية</a></div></section>
+<section class="page-hero section-pad"><div class="container narrow"><span class="eyebrow">تعذر إتمام الطلب</span><h1>نواجه مشكلة مؤقتة.</h1><p>يرجى المحاولة لاحقًا، أو التواصل معنا عبر الهاتف أو واتساب.</p><a class="btn btn-gold" href="<?= e(route_path('/')) ?>">العودة للرئيسية</a></div></section>

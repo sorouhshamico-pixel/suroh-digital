@@ -1,1 +1,1 @@
-<section class="page-hero section-pad"><div class="container narrow"><span class="eyebrow">404</span><h1>هذه الصفحة غير موجودة.</h1><p>قد يكون الرابط تغير أو لم يعد متاحًا.</p><a class="btn btn-gold" href="/">العودة للرئيسية</a></div></section>
+<section class="page-hero section-pad"><div class="container narrow"><span class="eyebrow">404</span><h1>هذه الصفحة غير موجودة.</h1><p>قد يكون الرابط تغير أو لم يعد متاحًا.</p><a class="btn btn-gold" href="<?= e(route_path('/')) ?>">العودة للرئيسية</a></div></section>

@@ -5,7 +5,7 @@ final class SeoController extends Controller{
  public function robots():void{
   header('Content-Type: text/plain; charset=utf-8');
   if(env('APP_ENV','production')!=='production'){echo "User-agent: *\nDisallow: /\n";return;}
-  echo "User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api/\nDisallow: /contact\nSitemap: ".url('sitemap.xml')."\n";
+  echo "User-agent: *\nAllow: ".route_path('/')."\nDisallow: ".route_path('/admin')."\nDisallow: ".route_path('/api/')."\nDisallow: ".route_path('/contact')."\nSitemap: ".url('sitemap.xml')."\n";
  }
  public function sitemap():void{
   $paths=['','services/web-development','services/digital-marketing','services/seo','services/graphic-design','services/classified-ads','services/custom-software','blog','privacy','terms'];
