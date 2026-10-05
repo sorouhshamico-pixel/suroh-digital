@@ -1,7 +1,7 @@
 # نشر صروح الرقمية على Hostinger
 
 ## الحالة الحالية
-الكود يستخدم PHP 8.2+ وMySQL مع MVC خفيف. يوجد مستودع Git محلي على development؛ لا يوجد remote أو نشر فعلي على GitHub/Hostinger في هذه النسخة. لا تُعد اختبارات localhost تحققًا من SSL أو DNS أو صلاحيات حساب الاستضافة.
+الكود يستخدم PHP 8.2+ وMySQL مع MVC خفيف. المستودع المرتبط باسم origin هو https://github.com/sorouhshamico-pixel/suroh-digital، مع فرعي main وdevelopment. لم يُنفذ نشر على Hostinger. لا تُعد اختبارات localhost تحققًا من SSL أو DNS أو صلاحيات حساب الاستضافة.
 
 ## 1. حدود النشر والمجلد العام
 الهدف هو https://digital.suroohalshami.com فقط. لا تعدل موقع الشركة الرئيسي أو مجلداته.
@@ -11,10 +11,10 @@
 اختُبرت rewrite وDirectoryIndex ومنع الملفات الحساسة وتنفيذ ملفات uploads محليًا على Apache 2.4؛ أعد الفحص على LiteSpeed/Apache في الاستضافة. يجب دعم .htaccess وmod_rewrite وmod_headers؛ expires اختياري للأصول.
 
 ## 2. GitHub والمراحل
-اربط مستودع GitHub خاصًا بعد تحديد عنوانه. development للتطوير وmain للنسخة التي اجتازت CI. راجع git status وgit diff وgit check-ignore .env قبل الرفع.
+المستودع المعتمد: https://github.com/sorouhshamico-pixel/suroh-digital. development للتطوير وmain للنسخة التي اجتازت CI. راجع git status وgit diff وgit check-ignore .env قبل الرفع.
 لا ترفع .env أو runtime أو كلمات المرور أو بيانات الطلبات أو uploads؛ .gitignore يستثنيها.
 CI يفحص PHP وJavaScript ويشغّل MySQL واختبارات HTTP ومتصفح. اختبارات قاعدة البيانات تحذف بيانات قاعدة **اختبارية فقط**؛ لا تشغلها ضد قاعدة الإنتاج.
-لا تفعّل نشرًا تلقائيًا لفرع لم ينجح في CI. رابط GitHub/مفتاح النشر واشتراك Hostinger معلومات يحددها صاحب الحساب؛ لا توجد قيم مفترضة.
+لا تفعّل نشرًا تلقائيًا لفرع لم ينجح في CI. عنوان GitHub محدد أعلاه؛ مفتاح النشر واشتراك Hostinger يحددهما صاحب الحساب.
 
 ## 3. PHP والبيئة
 فعّل PHP 8.2 أو أحدث وPDO MySQL وmbstring وDOM وsession وJSON. curl مطلوب لاختبارات التكامل.

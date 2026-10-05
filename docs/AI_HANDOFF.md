@@ -385,7 +385,7 @@ A feature is not done until:
 - Do not deploy destructive database changes without a backup/migration plan.
 
 ## 20. Verified continuation — 2026-10-05
-- The supplied folder had no Git history or remote. A local `development` repository was initialized with an unmodified application baseline (apart from exclusions for runtime data). GitHub/Hostinger deployment is not configured or performed.
+- The supplied folder had no Git history or remote. A local `development` repository was initialized with an unmodified application baseline (apart from exclusions for runtime data). The supplied GitHub origin is now configured; Hostinger deployment has not been performed.
 - Security phase: router authorization now runs before every protected admin read/mutation, including post CRUD and lead updates. Active admin role is rechecked in MySQL. Sessions have 30-minute inactivity and 8-hour absolute expiry, strict cookie-only IDs, regeneration and CSRF rotation at login, HttpOnly/SameSite cookies and Secure cookies in production.
 - Runtime sessions use private `storage/sessions`; logs use `storage/logs`. These and rate-limit state must be writable by PHP and excluded from Git. The lock-based limiter in `app/RateLimiter.php` supports a single Hostinger application instance.
 - Login is throttled by IP and account. CSRF rejects missing and array tokens. Errors return generic 500 responses with private reference IDs and no sensitive request or database text. Admin pages are no-store/noindex.
@@ -423,9 +423,9 @@ A feature is not done until:
 | Tracking/UTM | All required events, five UTM fields, session/visitor IDs and original landing tested | Validate real acquisition links and optional Google IDs |
 | SEO/legal/errors | Dynamic robots/sitemap, canonical/OG, legal pages and generic 404/500 tested | Owner approval of policy text and final-domain crawl checks |
 | Responsive/security review | Public/admin browser QA and real Apache boundary tests passed | Final device/hosting smoke test with production configuration |
-| Deployment documentation | Hostinger runbook, packaging, backup/rollback and preflight implemented | GitHub remote, green hosted CI, Hostinger account/path and production backup |
+| Deployment documentation | Hostinger runbook, packaging, backup/rollback and preflight implemented | Green hosted CI, Hostinger account/path and production backup |
 
-This is a locally verified release candidate, **not an already deployed or certified production installation**. No real GitHub remote, Hostinger credentials, production database, SSL endpoint or production admin was supplied. Do not claim these external launch gates passed.
+This is a locally verified release candidate, **not an already deployed or certified production installation**. GitHub origin was supplied as https://github.com/sorouhshamico-pixel/suroh-digital.git. Hostinger credentials, production database, SSL endpoint and production admin remain unprovided. Do not claim these external launch gates passed.
 Local preview stays on `http://127.0.0.1:8080` with dedicated `sorouh_local` MySQL on loopback 3307 and generated credentials in ignored `.env`; no admin credentials were invented. This development MySQL process uses a disposable local data directory under the Windows temporary directory; it is not production infrastructure. After a reboot, configure/start a regular local MySQL instance and update `.env` as needed.
 
 ### Tests and how to continue
@@ -436,5 +436,10 @@ Local preview stays on `http://127.0.0.1:8080` with dedicated `sorouh_local` MyS
 - `tests/production.php`: 10 simulated-production SEO/cookie/header checks on loopback; this does not verify real DNS/SSL.
 - `tests/preflight.php`: 3 checks that valid simulated production passes and development/outage fail, using a disposable SELECT-only database user.
 - `tests/admin_cli.php`: 7 stdin creation/reset/validation checks; passwords are random disposable values and never printed. Suites run sequentially against isolated data.
-- PHP lint and JavaScript syntax checks pass. `.github/workflows/ci.yml` now defines MySQL integration, migration, simulated production, preflight and Playwright QA; hosted GitHub Actions has not run because there is no remote.
+- PHP lint and JavaScript syntax checks pass. `.github/workflows/ci.yml` now defines MySQL integration, migration, simulated production, preflight and Playwright QA; hosted GitHub Actions status must be checked after publishing to the configured origin.
 - Start from `tests/README.md`, then complete the external release gate in `docs/HOSTINGER_DEPLOYMENT.md`. P1/P2 remain as listed above; media uploads, portfolio and advanced CRM are not silently introduced in this P0 pass.
+
+### GitHub publication — 2026-10-05
+- User supplied origin: https://github.com/sorouhshamico-pixel/suroh-digital.git.
+- Remote was verified empty before first publication; main and development use the same reviewed release snapshot, without force-pushing or replacing remote history.
+- Secrets and runtime data remain ignored and were checked absent from Git history. Hostinger deployment remains a separate release gate.

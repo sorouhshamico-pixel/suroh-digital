@@ -40,7 +40,7 @@ Remove-Variable adminSecret
 راجع [تعليمات الاختبارات](tests/README.md) للاختبارات الفعلية على قاعدة منفصلة، و[دليل Hostinger](docs/HOSTINGER_DEPLOYMENT.md) للنشر والنسخ الاحتياطية والتراجع، و[تسليم المشروع](docs/AI_HANDOFF.md) للحالة والمهام.
 `php tools/preflight.php` يفحص إعداد إنتاج حقيقي ويُفترض أن يفشل على إعداد التطوير.
 Document Root يجب أن يشير إلى public. للأجهزة التي لا تدعم ذلك، توجد أداة public-only packaging موثقة في دليل النشر.
-GitHub Actions يعرّف PHP/JS lint واختبارات MySQL والمتصفح. لا يوجد remote أو نشر فعلي مهيأ في هذه النسخة.
+GitHub Actions يعرّف PHP/JS lint واختبارات MySQL والمتصفح. تم ربط origin بالمستودع https://github.com/sorouhshamico-pixel/suroh-digital؛ النشر على Hostinger لم يُنفذ.
 
 ## الأسرار والأصول
 .env والسجلات والجلسات وبيانات الاختبار وuploads مستثناة من Git. لا ترفع كلمات المرور أو بيانات العملاء.
