@@ -1,0 +1,6 @@
+<?php
+namespace App\Controllers;
+use App\Database;
+final class TrackingController extends Controller {
+ public function store():void{$payload=json_decode(file_get_contents('php://input')?:'{}',true)?:[];$event=preg_replace('/[^a-z0-9_\-]/i','',(string)($payload['event']??'unknown'))?:'unknown';$visitor=substr((string)($payload['visitor_id']??''),0,80);$session=substr((string)($payload['session_id']??''),0,80);$data=['visitor_id'=>$visitor,'session_id'=>$session,'event_name'=>$event,'page_url'=>substr((string)($payload['page']??''),0,500),'referrer'=>substr((string)($payload['referrer']??''),0,500),'utm_source'=>substr((string)($payload['source']??''),0,120),'utm_medium'=>substr((string)($payload['medium']??''),0,120),'utm_campaign'=>substr((string)($payload['campaign']??''),0,120),'metadata'=>json_encode($payload['meta']??[],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)];$pdo=Database::connection();if($pdo){$st=$pdo->prepare("INSERT INTO tracking_events(visitor_id,session_id,event_name,page_url,referrer,utm_source,utm_medium,utm_campaign,metadata,created_at) VALUES(?,?,?,?,?,?,?,?,?,NOW())");$st->execute(array_values($data));}else{file_put_contents(storage_path('logs/events-'.date('Y-m').'.log'),json_encode($data,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES).PHP_EOL,FILE_APPEND|LOCK_EX);} $this->json(['ok'=>true]);}
+}

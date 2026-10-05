@@ -1,0 +1,3 @@
+<?php
+declare(strict_types=1); require_once __DIR__.'/../app/bootstrap.php'; use App\Database;
+if(PHP_SAPI!=='cli')exit("CLI only\n");$email=$argv[1]??'';$password=$argv[2]??'';$name=$argv[3]??'مدير صروح الرقمية';if(!$email||strlen($password)<10){exit("Usage: php database/create_admin.php admin@example.com 'StrongPassword!' 'Name'\nPassword must be 10+ chars.\n");}$pdo=Database::connection();if(!$pdo)exit("Database connection failed. Check .env\n");$hash=password_hash($password,PASSWORD_DEFAULT);$st=$pdo->prepare("INSERT INTO users(name,email,password_hash,role,is_active) VALUES(?,?,?,'admin',1) ON DUPLICATE KEY UPDATE name=VALUES(name),password_hash=VALUES(password_hash),is_active=1");$st->execute([$name,mb_strtolower($email),$hash]);echo "Admin ready: {$email}\n";

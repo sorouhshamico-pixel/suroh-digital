@@ -1,0 +1,2 @@
+<?php
+return ['name'=>'صروح الرقمية','url'=>env('APP_URL','https://digital.suroohalshami.com'),'phone'=>env('BUSINESS_PHONE','0551526225'),'whatsapp'=>env('WHATSAPP_NUMBER','966551526225'),'email'=>env('BUSINESS_EMAIL',''),'gtm'=>env('GTM_CONTAINER_ID',''),'ga4'=>env('GA4_MEASUREMENT_ID','')];

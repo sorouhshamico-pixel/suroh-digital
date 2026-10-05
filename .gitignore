@@ -1,0 +1,14 @@
+.env
+/storage/logs/*.log
+/storage/cache/*
+!/storage/logs/.gitkeep
+!/storage/cache/.gitkeep
+/public/uploads/*
+!/public/uploads/.gitkeep
+.DS_Store
+Thumbs.db
+/storage/sessions/*
+/storage/local-server.*.log
+/storage/testing/*
+/node_modules/
+/tests/artifacts/*

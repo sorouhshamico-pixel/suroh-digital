@@ -1,0 +1,6 @@
+<?php
+namespace App\Controllers\Admin;
+use App\Controllers\Controller; use App\Database;
+final class DashboardController extends Controller {
+ public function index():void{$pdo=Database::connection();$stats=['leads'=>0,'new'=>0,'posts'=>0,'events'=>0];$sources=[];$recent=[];if($pdo){$stats['leads']=(int)$pdo->query('SELECT COUNT(*) FROM leads')->fetchColumn();$stats['new']=(int)$pdo->query("SELECT COUNT(*) FROM leads WHERE status='new'")->fetchColumn();$stats['posts']=(int)$pdo->query("SELECT COUNT(*) FROM posts WHERE status='published'")->fetchColumn();$stats['events']=(int)$pdo->query("SELECT COUNT(*) FROM tracking_events WHERE created_at>=DATE_SUB(NOW(), INTERVAL 30 DAY)")->fetchColumn();$sources=$pdo->query("SELECT COALESCE(NULLIF(utm_source,''),'direct') source, COUNT(*) total FROM leads GROUP BY source ORDER BY total DESC LIMIT 8")->fetchAll();$recent=$pdo->query("SELECT * FROM leads ORDER BY created_at DESC LIMIT 8")->fetchAll();}$this->adminView('admin/dashboard',['title'=>'لوحة التحكم','stats'=>$stats,'sources'=>$sources,'recent'=>$recent,'dbReady'=>(bool)$pdo]);}
+}

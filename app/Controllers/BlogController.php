@@ -1,0 +1,7 @@
+<?php
+namespace App\Controllers;
+use App\Database;
+final class BlogController extends Controller {
+ public function index():void{$pdo=Database::connection();$posts=[];if($pdo){$posts=$pdo->query("SELECT id,title,slug,excerpt,featured_image,published_at FROM posts WHERE status='published' AND (published_at IS NULL OR published_at<=NOW()) ORDER BY COALESCE(published_at,created_at) DESC")->fetchAll();}$this->view('blog/index',['title'=>'مدونة صروح الرقمية | البرمجة والتسويق وSEO','description'=>'مقالات عملية حول تطوير المواقع والتسويق الرقمي وتحسين محركات البحث ونمو الأعمال.','posts'=>$posts]);}
+ public function show(string $slug):void{$pdo=Database::connection();$post=null;if($pdo){$st=$pdo->prepare("SELECT * FROM posts WHERE slug=? AND status='published' AND (published_at IS NULL OR published_at<=NOW()) LIMIT 1");$st->execute([$slug]);$post=$st->fetch()?:null;}if(!$post){http_response_code(404);$this->view('pages/404',['title'=>'المقال غير موجود','description'=>'']);return;}$this->view('blog/show',['title'=>$post['meta_title']?:$post['title'].' | صروح الرقمية','description'=>$post['meta_description']?:$post['excerpt'],'post'=>$post,'canonical'=>$post['canonical_url']?:url('blog/'.$post['slug']),'schemaType'=>'Article']);}
+}
