@@ -21,7 +21,7 @@ if(empty($_SESSION['submission_id'])){$_SESSION['submission_id']=bin2hex(random_
     </div>
     <div class="hero-visual reveal delay-1">
       <div class="photo-frame hero-photo">
-        <img src="https://images.pexels.com/photos/5466236/pexels-photo-5466236.jpeg?auto=compress&cs=tinysrgb&w=1400" alt="فريق تقني يعمل على مشروع رقمي" loading="eager">
+        <img src="/assets/img/hero-team.webp" alt="فريق تقني يعمل على مشروع رقمي" width="960" height="638" loading="eager" fetchpriority="high" decoding="async">
         <div class="photo-overlay"></div>
       </div>
       <div class="floating-card card-a"><span class="iconbox"><i data-lucide="trending-up"></i></span><div><b>حملات قابلة للقياس</b><small>قرارات أفضل بالبيانات</small></div></div>
@@ -55,7 +55,7 @@ if(empty($_SESSION['submission_id'])){$_SESSION['submission_id']=bin2hex(random_
 <section id="work" class="feature-section section-pad">
   <div class="container feature-grid">
     <div class="feature-media reveal">
-      <img src="https://images.pexels.com/photos/12899156/pexels-photo-12899156.jpeg?auto=compress&cs=tinysrgb&w=1400" alt="مطور يعمل على برمجة موقع إلكتروني" loading="lazy">
+      <img src="/assets/img/development.webp" alt="مطور يعمل على برمجة موقع إلكتروني" width="960" height="1440" loading="lazy" decoding="async">
       <div class="metric-card"><span>سرعة + تجربة مستخدم</span><strong>Performance First</strong></div>
     </div>
     <div class="feature-copy reveal delay-1">
@@ -76,7 +76,7 @@ if(empty($_SESSION['submission_id'])){$_SESSION['submission_id']=bin2hex(random_
   <div class="container">
     <div class="section-head reveal"><div><span class="eyebrow">أسلوبنا</span><h2>نحوّل الفكرة إلى <span class="gold-text">تجربة مقنعة.</span></h2></div><p>نعمل على الرسالة، الهيكل، التصميم، الكود، ثم القياس والتحسين بعد الإطلاق.</p></div>
     <div class="showcase-grid">
-      <div class="showcase-main reveal"><img src="https://images.pexels.com/photos/8368013/pexels-photo-8368013.jpeg?auto=compress&cs=tinysrgb&w=1400" alt="فريق يناقش استراتيجية مشروع رقمي" loading="lazy"><div class="caption"><span>استراتيجية وتجربة</span><b>قرارات مبنية على هدف العمل</b></div></div>
+      <div class="showcase-main reveal"><img src="/assets/img/strategy.webp" alt="فريق يناقش استراتيجية مشروع رقمي" width="960" height="640" loading="lazy" decoding="async"><div class="caption"><span>استراتيجية وتجربة</span><b>قرارات مبنية على هدف العمل</b></div></div>
       <div class="showcase-side reveal delay-1"><div class="side-card"><i data-lucide="layout-dashboard"></i><b>واجهات تبيع</b><span>تصميم واضح يقود الزائر نحو الإجراء المطلوب.</span></div><div class="side-card accent"><i data-lucide="bar-chart-3"></i><b>قياس مستمر</b><span>نعرف من أين أتى العميل وما الإجراء الذي قام به.</span></div></div>
     </div>
   </div>
@@ -103,14 +103,14 @@ if(empty($_SESSION['submission_id'])){$_SESSION['submission_id']=bin2hex(random_
         <span><?= e(date('Y/m/d',strtotime($post['published_at'] ?: 'now'))) ?></span><h3><a href="/blog/<?= e($post['slug']) ?>"><?= e($post['title']) ?></a></h3><a href="/blog/<?= e($post['slug']) ?>">اقرأ المقال</a>
       </article>
       <?php endforeach; ?>
-      <?php if(!$posts): ?><div class="empty-public"><h3>مدونة صروح الرقمية قيد التجهيز.</h3><p>يمكن نشر المقالات مباشرة من لوحة الإدارة.</p><a class="text-link" href="/blog">فتح المدونة</a></div><?php endif; ?>
+      <?php if(!$posts): ?><div class="empty-public"><h3>ابدأ بفهم احتياجك الرقمي.</h3><p>تعرّف على الخدمات المناسبة لمشروعك، أو تواصل معنا لمناقشة نطاق التنفيذ.</p><a class="text-link" href="#services">استكشف خدماتنا</a></div><?php endif; ?>
     </div>
   </div>
 </section>
 
 <section id="contact" class="contact section-pad">
   <div class="container contact-grid">
-    <div class="contact-copy reveal"><span class="eyebrow">ابدأ مشروعك</span><h2>أخبرنا بما تريد بناءه، وسنرتب لك <span class="gold-text">المسار المناسب.</span></h2><p>أرسل تفاصيل مختصرة عن نشاطك والخدمة المطلوبة. سيتم تسجيل المصدر والحملة تلقائيًا لتسهيل قياس النتائج.</p><div class="contact-direct"><a class="track" data-event="whatsapp_click" href="https://wa.me/<?= e(config('whatsapp')) ?>"><i data-lucide="message-circle"></i><span><small>واتساب</small><b><?= e(config('phone')) ?></b></span></a><a class="track" data-event="phone_click" href="tel:<?= e(config('phone')) ?>"><i data-lucide="phone-call"></i><span><small>اتصال مباشر</small><b><?= e(config('phone')) ?></b></span></a></div></div>
+    <div class="contact-copy reveal"><span class="eyebrow">ابدأ مشروعك</span><h2>أخبرنا بما تريد بناءه، وسنرتب لك <span class="gold-text">المسار المناسب.</span></h2><p>أرسل تفاصيل مختصرة عن نشاطك والخدمة المطلوبة لنناقش معك النطاق والخطوات المناسبة.</p><div class="contact-direct"><a class="track" data-event="whatsapp_click" href="https://wa.me/<?= e(config('whatsapp')) ?>"><i data-lucide="message-circle"></i><span><small>واتساب</small><b><?= e(config('phone')) ?></b></span></a><a class="track" data-event="phone_click" href="tel:<?= e(config('phone')) ?>"><i data-lucide="phone-call"></i><span><small>اتصال مباشر</small><b><?= e(config('phone')) ?></b></span></a></div></div>
     <form class="contact-form reveal delay-1" method="post" action="/contact" data-lead-form>
       <?php if($success): ?><div class="alert success"><?= e($success) ?></div><?php endif; ?>
       <?php if($error): ?><div class="alert error"><?= e($error) ?></div><?php endif; ?>

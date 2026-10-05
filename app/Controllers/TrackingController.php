@@ -10,7 +10,7 @@ final class TrackingController extends Controller {
     $payload=json_decode($raw,true);
     if(!is_array($payload)||json_last_error()!==JSON_ERROR_NONE)$this->json(['ok'=>false],400);
     $token=$payload['_token']??null;
-    if(!is_string($token)||empty($_SESSION['_token'])||!hash_equals($_SESSION['_token'],$token))$this->json(['ok'=>false],419);
+    if(!is_string($token)||empty($_SESSION['_token'])||!hash_equals($_SESSION['_token'],$token))$this->json(['ok'=>false],403);
     $event=input_text($payload,'event',40);
     // form_submit is recorded transactionally by LeadController only after persistence.
     if(!in_array($event,['page_view','whatsapp_click','phone_click','form_start','cta_click','service_view'],true))$this->json(['ok'=>false],422);

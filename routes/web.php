@@ -2,6 +2,11 @@
 use App\Controllers\HomeController; use App\Controllers\TrackingController; use App\Controllers\LeadController; use App\Controllers\BlogController; use App\Controllers\ServiceController;
 use App\Controllers\Admin\AuthController; use App\Controllers\Admin\DashboardController; use App\Controllers\Admin\PostController; use App\Controllers\Admin\LeadAdminController; use App\Controllers\Admin\AnalyticsController;
 $router->get('/',[HomeController::class,'index']);
+$router->get('/privacy',[\App\Controllers\PageController::class,'privacy']);
+$router->get('/terms',[\App\Controllers\PageController::class,'terms']);
+$router->get('/contact',[\App\Controllers\PageController::class,'contact']);
+$router->get('/robots.txt',[\App\Controllers\SeoController::class,'robots']);
+$router->get('/sitemap.xml',[\App\Controllers\SeoController::class,'sitemap']);
 $router->get('/services/{slug}',[ServiceController::class,'show']);
 $router->get('/blog',[BlogController::class,'index']); $router->get('/blog/{slug}',[BlogController::class,'show']);
 $router->post('/api/track',[TrackingController::class,'store']); $router->post('/contact',[LeadController::class,'store']);

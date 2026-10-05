@@ -1,0 +1,3 @@
+# Fail closed if the whole application is accidentally deployed as the web root.
+# Configure the subdomain document root to public; do not remove this guard.
+Require all denied

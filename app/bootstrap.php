@@ -20,7 +20,8 @@ function load_env(): void {
     foreach (file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [] as $line) {
         $line=trim($line); if ($line==='' || str_starts_with($line,'#') || !str_contains($line,'=')) continue;
         [$key,$value]=array_map('trim',explode('=',$line,2));
-        $value=trim($value," \t\n\r\0\x0B\"'");
+        if (!preg_match('/^[A-Z_][A-Z0-9_]*$/',$key)) continue;
+        if (strlen($value)>=2 && in_array($value[0],["\"","'"],true) && $value[0]===$value[strlen($value)-1]) $value=substr($value,1,-1);
         if (getenv($key) === false) { putenv("{$key}={$value}"); $_ENV[$key]=$value; }
     }
 }
@@ -60,7 +61,7 @@ if (PHP_SAPI !== 'cli') {
     header('X-Frame-Options: SAMEORIGIN');
     header('Referrer-Policy: strict-origin-when-cross-origin');
     header('Permissions-Policy: camera=(), microphone=(), geolocation=()');
-    header("Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce-".csp_nonce()."' https://unpkg.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src https://www.googletagmanager.com; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'");
+    header("Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce-".csp_nonce()."' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' https: data:; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src https://www.googletagmanager.com; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'");
     if (env('APP_ENV','production')==='production') header('Strict-Transport-Security: max-age=31536000');
     if (str_starts_with($_SERVER['REQUEST_URI'] ?? '', '/admin')) {
         header('Cache-Control: no-store'); header('X-Robots-Tag: noindex, nofollow');
@@ -73,7 +74,7 @@ function url(string $path=''): string { return rtrim((string)config('url'),'/') 
 function e(mixed $value): string { return htmlspecialchars((string)($value ?? ''), ENT_QUOTES, 'UTF-8'); }
 function csrf_token(): string { if (empty($_SESSION['_token'])) $_SESSION['_token']=bin2hex(random_bytes(32)); return $_SESSION['_token']; }
 function csrf_field(): string { return '<input type="hidden" name="_token" value="'.e(csrf_token()).'">'; }
-function verify_csrf(): void { $token=$_POST['_token']??null; if (!is_string($token) || empty($_SESSION['_token']) || !hash_equals($_SESSION['_token'], $token)) { http_response_code(419); exit('انتهت صلاحية الجلسة. أعد تحميل الصفحة وحاول مرة أخرى.'); } }
+function verify_csrf(): void { $token=$_POST['_token']??null; if (!is_string($token) || empty($_SESSION['_token']) || !hash_equals($_SESSION['_token'], $token)) { http_response_code(403); exit('انتهت صلاحية الجلسة. أعد تحميل الصفحة وحاول مرة أخرى.'); } }
 function redirect(string $to): never { header('Location: '.$to); exit; }
 function flash(string $key, ?string $value=null): ?string { if($value!==null){$_SESSION['_flash'][$key]=$value;return null;} $v=$_SESSION['_flash'][$key]??null; unset($_SESSION['_flash'][$key]); return $v; }
 function old(string $key, string $default=''): string { return (string)($_SESSION['_old'][$key] ?? $default); }
@@ -86,8 +87,9 @@ function is_admin(): bool {
         unset($_SESSION['admin_user_id'],$_SESSION['admin_name']); return false;
     }
     $pdo=\App\Database::connection(); if (!$pdo) return false;
-    $query=$pdo->prepare("SELECT id FROM users WHERE id=? AND is_active=1 AND role='admin'");
-    $query->execute([$_SESSION['admin_user_id']]); if (!$query->fetchColumn()) return false;
+    $query=$pdo->prepare("SELECT id,password_hash FROM users WHERE id=? AND is_active=1 AND role='admin'");
+    $query->execute([$_SESSION['admin_user_id']]); $user=$query->fetch();
+    if (!$user || !hash_equals($_SESSION['admin_auth_hash']??'',hash('sha256',$user['password_hash']))) { unset($_SESSION['admin_user_id'],$_SESSION['admin_name']); return false; }
     $_SESSION['admin_last_activity']=time(); return true;
 }
 function input_text(array $data, string $key, int $length=500): string {

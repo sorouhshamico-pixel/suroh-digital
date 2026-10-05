@@ -12,7 +12,7 @@ final class HomeController extends Controller
             ['title'=>'تحسين محركات البحث','slug'=>'seo','icon'=>'search','desc'=>'SEO تقني ومحتوى وهيكلة صفحات تساعدك على المنافسة في نتائج البحث.'],
             ['title'=>'الجرافيك والهوية','slug'=>'graphic-design','icon'=>'palette','desc'=>'هوية بصرية وتصاميم إعلانية متماسكة تعكس قيمة نشاطك.'],
             ['title'=>'إدارة حراج ومرجان','slug'=>'classified-ads','icon'=>'badge-dollar-sign','desc'=>'كتابة وتجهيز وتحسين الإعلانات المبوبة ومتابعة أدائها باحتراف.'],
-            ['title'=>'حلول برمجية مخصصة','slug'=>'custom-solutions','icon'=>'blocks','desc'=>'أنظمة داخلية، أتمتة، نماذج متقدمة، ولوحات تحكم حسب احتياج العمل.'],
+            ['title'=>'حلول برمجية مخصصة','slug'=>'custom-software','icon'=>'blocks','desc'=>'أنظمة داخلية، أتمتة، نماذج متقدمة، ولوحات تحكم حسب احتياج العمل.'],
         ];
 
         $posts=[]; $pdo=Database::connection(); if($pdo){ $posts=$pdo->query("SELECT title,slug,excerpt,featured_image,published_at FROM posts WHERE status='published' AND (published_at IS NULL OR published_at<=NOW()) ORDER BY COALESCE(published_at,created_at) DESC LIMIT 3")->fetchAll(); }

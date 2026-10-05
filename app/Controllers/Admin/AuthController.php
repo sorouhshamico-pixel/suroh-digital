@@ -16,6 +16,7 @@ final class AuthController extends Controller {
     session_regenerate_id(true);$_SESSION['admin_user_id']=$u['id'];$_SESSION['admin_name']=$u['name'];
     $_SESSION['admin_authenticated_at']=$_SESSION['admin_last_activity']=time();$_SESSION['_token']=bin2hex(random_bytes(32));
     $hash=password_needs_rehash($u['password_hash'],PASSWORD_DEFAULT)?password_hash($password,PASSWORD_DEFAULT):$u['password_hash'];
+    $_SESSION['admin_auth_hash']=hash('sha256',$hash);
     $pdo->prepare('UPDATE users SET last_login_at=NOW(),password_hash=? WHERE id=?')->execute([$hash,$u['id']]);redirect('/admin');
  }
  public function logout():void{verify_csrf();$_SESSION=[];session_regenerate_id(true);redirect('/admin/login');}
