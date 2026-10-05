@@ -1,6 +1,7 @@
 <?php
 $success = flash('success');
 $error = flash('error');
+if(empty($_SESSION['submission_id'])){$_SESSION['submission_id']=bin2hex(random_bytes(16));$_SESSION['form_started_at']=time();}
 ?>
 <section class="hero section-pad">
   <div class="hero-grid container">
@@ -114,12 +115,15 @@ $error = flash('error');
       <?php if($success): ?><div class="alert success"><?= e($success) ?></div><?php endif; ?>
       <?php if($error): ?><div class="alert error"><?= e($error) ?></div><?php endif; ?>
       <input type="hidden" name="_token" value="<?= e(csrf_token()) ?>">
+      <input type="hidden" name="submission_id" value="<?= e($_SESSION['submission_id']) ?>">
+      <label class="honeypot" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
       <input type="hidden" name="utm_source"><input type="hidden" name="utm_medium"><input type="hidden" name="utm_campaign"><input type="hidden" name="utm_content"><input type="hidden" name="landing_page">
       <div class="field-row"><label>الاسم<input required name="name" value="<?= e(old('name')) ?>" placeholder="اسمك أو اسم المنشأة"></label><label>رقم التواصل<input required name="phone" value="<?= e(old('phone')) ?>" inputmode="tel" placeholder="05xxxxxxxx"></label></div><label>البريد الإلكتروني <small>اختياري</small><input type="email" name="email" value="<?= e(old('email')) ?>" placeholder="name@company.com"></label>
       <label>الخدمة المطلوبة<select name="service"><option>تصميم وبرمجة موقع</option><option>التسويق الإلكتروني</option><option>تحسين محركات البحث</option><option>الجرافيك والهوية</option><option>إدارة حراج ومرجان</option><option>حلول برمجية مخصصة</option></select></label>
-      <label>تفاصيل المشروع<textarea name="message" rows="5" placeholder="ما الذي تريد تنفيذه؟"></textarea></label>
+      <label>تفاصيل المشروع<textarea name="message" rows="5" maxlength="3000" placeholder="ما الذي تريد تنفيذه؟"><?= e(old('message')) ?></textarea></label>
+      <label class="consent"><input type="checkbox" name="consent" value="1" required><span>أوافق على معالجة بياناتي للتواصل بشأن الطلب وفق <a href="/privacy">سياسة الخصوصية</a>.</span></label>
       <button class="btn btn-gold btn-lg" type="submit"><i data-lucide="send"></i> إرسال طلب الخدمة</button>
-      <small class="form-note">بالإرسال أنت توافق على استخدام بياناتك للتواصل بشأن طلبك فقط.</small>
+      <small class="form-note">استخدام الموقع يخضع لـ<a href="/terms">الشروط والأحكام</a>.</small>
     </form>
   </div>
 </section>

@@ -1,6 +1,24 @@
 <?php
 namespace App\Controllers;
-use App\Database;
+use App\Database; use App\Attribution; use App\RateLimiter;
 final class TrackingController extends Controller {
- public function store():void{$payload=json_decode(file_get_contents('php://input')?:'{}',true)?:[];$event=preg_replace('/[^a-z0-9_\-]/i','',(string)($payload['event']??'unknown'))?:'unknown';$visitor=substr((string)($payload['visitor_id']??''),0,80);$session=substr((string)($payload['session_id']??''),0,80);$data=['visitor_id'=>$visitor,'session_id'=>$session,'event_name'=>$event,'page_url'=>substr((string)($payload['page']??''),0,500),'referrer'=>substr((string)($payload['referrer']??''),0,500),'utm_source'=>substr((string)($payload['source']??''),0,120),'utm_medium'=>substr((string)($payload['medium']??''),0,120),'utm_campaign'=>substr((string)($payload['campaign']??''),0,120),'metadata'=>json_encode($payload['meta']??[],JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)];$pdo=Database::connection();if($pdo){$st=$pdo->prepare("INSERT INTO tracking_events(visitor_id,session_id,event_name,page_url,referrer,utm_source,utm_medium,utm_campaign,metadata,created_at) VALUES(?,?,?,?,?,?,?,?,?,NOW())");$st->execute(array_values($data));}else{file_put_contents(storage_path('logs/events-'.date('Y-m').'.log'),json_encode($data,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES).PHP_EOL,FILE_APPEND|LOCK_EX);} $this->json(['ok'=>true]);}
+ public function store():void {
+    header('Cache-Control: no-store');
+    if((int)($_SERVER['CONTENT_LENGTH']??0)>8192)$this->json(['ok'=>false],413);
+    if(!str_starts_with(strtolower($_SERVER['CONTENT_TYPE']??''),'application/json'))$this->json(['ok'=>false],415);
+    $raw=file_get_contents('php://input',false,null,0,8193);if(strlen($raw)>8192)$this->json(['ok'=>false],413);
+    $payload=json_decode($raw,true);
+    if(!is_array($payload)||json_last_error()!==JSON_ERROR_NONE)$this->json(['ok'=>false],400);
+    $token=$payload['_token']??null;
+    if(!is_string($token)||empty($_SESSION['_token'])||!hash_equals($_SESSION['_token'],$token))$this->json(['ok'=>false],419);
+    $event=input_text($payload,'event',40);
+    // form_submit is recorded transactionally by LeadController only after persistence.
+    if(!in_array($event,['page_view','whatsapp_click','phone_click','form_start','cta_click','service_view'],true))$this->json(['ok'=>false],422);
+    if(!RateLimiter::allow('track:'.($_SERVER['REMOTE_ADDR']??''),180,60))$this->json(['ok'=>false],429);
+    $pdo=Database::connection();if(!$pdo)$this->json(['ok'=>false],503);
+    $a=Attribution::current();
+    $st=$pdo->prepare("INSERT INTO tracking_events(visitor_id,session_id,event_name,page_url,landing_page,referrer,utm_source,utm_medium,utm_campaign,utm_content,utm_term,metadata) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
+    $st->execute([$_SESSION['visitor_id']??'',$_SESSION['tracking_session_id']??'',$event,Attribution::path(input_text($payload,'page')),$a['landing_page'],$a['referrer'],$a['utm_source'],$a['utm_medium'],$a['utm_campaign'],$a['utm_content'],$a['utm_term'],'{}']);
+    $this->json(['ok'=>true]);
+ }
 }

@@ -12,7 +12,7 @@ spl_autoload_register(function (string $class): void {
 function base_path(string $path = ''): string { return dirname(__DIR__) . ($path ? '/' . ltrim($path, '/') : ''); }
 function view_path(string $path = ''): string { return base_path('resources/views' . ($path ? '/' . ltrim($path, '/') : '')); }
 function public_path(string $path = ''): string { return base_path('public' . ($path ? '/' . ltrim($path, '/') : '')); }
-function storage_path(string $path = ''): string { return base_path('storage' . ($path ? '/' . ltrim($path, '/') : '')); }
+function storage_path(string $path = ''): string { $root=getenv('STORAGE_PATH') ?: base_path('storage'); return rtrim($root,'/\\') . ($path ? '/' . ltrim($path, '/') : ''); }
 
 function load_env(): void {
     static $loaded = false; if ($loaded) return; $loaded = true;
@@ -60,6 +60,7 @@ if (PHP_SAPI !== 'cli') {
     header('X-Frame-Options: SAMEORIGIN');
     header('Referrer-Policy: strict-origin-when-cross-origin');
     header('Permissions-Policy: camera=(), microphone=(), geolocation=()');
+    header("Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce-".csp_nonce()."' https://unpkg.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src https://www.googletagmanager.com; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'");
     if (env('APP_ENV','production')==='production') header('Strict-Transport-Security: max-age=31536000');
     if (str_starts_with($_SERVER['REQUEST_URI'] ?? '', '/admin')) {
         header('Cache-Control: no-store'); header('X-Robots-Tag: noindex, nofollow');
@@ -93,3 +94,5 @@ function input_text(array $data, string $key, int $length=500): string {
     $value=$data[$key]??''; return is_string($value) ? mb_substr(trim($value),0,$length) : '';
 }
 function json_safe(mixed $data): string { return json_encode($data, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_THROW_ON_ERROR); }
+function csp_nonce(): string { static $nonce=null; return $nonce??=base64_encode(random_bytes(18)); }
+if (PHP_SAPI !== 'cli' && in_array($_SERVER['REQUEST_METHOD']??'GET',['GET','HEAD'],true)) \App\Attribution::capture();
