@@ -1,10 +1,20 @@
 <?php
 declare(strict_types=1);
 
+if (PHP_SAPI === 'cli-server') {
+    $path = rawurldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/');
+    $file = realpath(__DIR__.$path);
+    if ($file && str_starts_with($file, __DIR__.DIRECTORY_SEPARATOR) && is_file($file)
+        && preg_match('#^/(assets|uploads)/#', $path) && !preg_match('/\.(php|phtml|phar|htaccess)$/i', $path)) return false;
+}
 require_once __DIR__ . '/../app/bootstrap.php';
 
 use App\Router;
 
 $router = new Router();
 require __DIR__ . '/../routes/web.php';
-$router->dispatch($_SERVER['REQUEST_METHOD'], parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/');
+$path=parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/';
+if ($path !== '/' && str_ends_with($path, '/') && in_array($_SERVER['REQUEST_METHOD'], ['GET','HEAD'], true)) {
+    header('Location: '.rtrim($path, '/').(!empty($_SERVER['QUERY_STRING'])?'?'.$_SERVER['QUERY_STRING']:''), true, 301); exit;
+}
+$router->dispatch($_SERVER['REQUEST_METHOD'], $path);

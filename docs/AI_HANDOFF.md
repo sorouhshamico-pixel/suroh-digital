@@ -383,3 +383,11 @@ A feature is not done until:
 - Do not replace the approved Sorouh Digital identity without explicit approval.
 - Do not fabricate business claims.
 - Do not deploy destructive database changes without a backup/migration plan.
+
+## 20. Verified continuation — 2026-10-05
+- The supplied folder had no Git history or remote. A local `development` repository was initialized with an unmodified application baseline (apart from exclusions for runtime data). GitHub/Hostinger deployment is not configured or performed.
+- Security phase: router authorization now runs before every protected admin read/mutation, including post CRUD and lead updates. Active admin role is rechecked in MySQL. Sessions have 30-minute inactivity and 8-hour absolute expiry, strict cookie-only IDs, regeneration and CSRF rotation at login, HttpOnly/SameSite cookies and Secure cookies in production.
+- Runtime sessions use private `storage/sessions`; logs use `storage/logs`. These and rate-limit state must be writable by PHP and excluded from Git. The lock-based limiter in `app/RateLimiter.php` supports a single Hostinger application instance.
+- Login is throttled by IP and account. CSRF rejects missing and array tokens. Errors return generic 500 responses with private reference IDs and no sensitive request or database text. Admin pages are no-store/noindex.
+- Built-in server now serves public assets correctly; trailing-slash GETs redirect to canonical paths; method mismatches return 405. Framework, brand, legacy routes, CRM and CMS are preserved.
+- Remaining P0 work at this phase: MySQL-backed contact/attribution verification, tracking validation and conversion correctness, legal pages, dynamic SEO resources, responsive/browser QA, complete release runbook and deployment preflight.
